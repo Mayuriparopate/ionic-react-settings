@@ -1,0 +1,7 @@
+{
+  "name": "whats-app-clone",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

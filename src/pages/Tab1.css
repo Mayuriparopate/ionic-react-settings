@@ -1,0 +1,171 @@
+.level-bar {
+  height: 7px;
+  width: 3px;
+  background-color: #ccc;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.level-indicator-container {
+  flex: 1;
+  margin-left: 0
+}
+
+/* Responsive layout for larger screens */
+@media (min-width: 768px) {
+
+  .level-indicator-container {
+    margin-left: 16px;
+  }
+}
+
+.ion-btn-selection-view {
+  text-align: left;
+}
+
+.btn-wrapper {
+  display: flex;
+}
+
+@media only screen and (min-device-width: 786px) {
+  .level-item {
+    display: flex !important;
+    justify-content: space-between;
+  }
+}
+
+.tab-selector-container {
+  display: flex;
+  max-width: 350px;
+  margin: auto;
+  justify-content: center;
+  background-color: white;
+}
+
+.custom-segment {
+  --background: #D7E5FF;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  --ripple-color: white;
+  --color-checked: transparent !important;
+  border-radius: 6px;
+}
+
+.custom-segment-button {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2881e4;
+}
+
+
+.custom-segment ion-segment-button {
+  border-radius: 4px;
+}
+
+.custom-segment ion-segment-button:not(.segment-button-checked) {
+  background-color: transparent;
+}
+
+.custom-segment ion-segment-button.segment-button-checked {
+  background-color: white;
+  margin: 1.5px;
+}
+
+.custom-segment-button.with-divider::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60%;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.custom-segment-button:last-child.with-divider::after {
+  display: none;
+}
+
+
+
+ion-range {
+  --bar-background: lightgrey;
+  --bar-height: 4px;
+  --bar-border-radius: 8px;
+  --knob-size: 40px;
+  --knob-background: #5081f4;
+  --pin-background: #cf1c5d;
+  --pin-color: #ed0404;
+}
+
+.test-button {
+  width: auto;
+  max-width: 200px;
+}
+
+@media (max-width: 786px) {
+  .test-button {
+    width: 100%;
+  }
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+}
+
+.noiceBtn {
+  border: 3px solid #9db6e8;
+  border-radius: 10px;
+}
+
+ion-segment-button {
+  --indicator-color: transparent;
+}
+
+.check-flags {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.margin-10 {
+  margin-top: 10px;
+}
+
+.mr-6 {
+  margin-right: 6px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.custom-icon {
+  font-size: 20px;
+  color: var(--ion-color-primary);
+}
+
+
+.audio-content {
+  display: flex;
+}
+
+.row-layout {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+}
+
+.col-layout {
+  max-width: 380px;
+}
+
+.setting-section {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
