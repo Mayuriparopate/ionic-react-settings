@@ -34,7 +34,9 @@ const AudioSettings: React.FC = () => {
       // Fetch the list of devices
       const devices = await navigator.mediaDevices.enumerateDevices();
       const inputs = devices.filter((device) => device.kind === "audioinput");
-      console.log(devices + "devices");
+      console.log(JSON.stringify(devices) + "devices");
+      console.log(JSON.stringify(inputs) + "input");
+
       if (inputs.length === 0) {
         alert("No microphone devices found.");
       } else {
@@ -53,33 +55,16 @@ const AudioSettings: React.FC = () => {
       }
     }
   };
-  useEffect(() => {
-    fetchMicrophoneDevices();
-    // navigator.mediaDevices.enumerateDevices().then((devices) => {
-    //   const inputs = devices.filter((device) => device.kind === "audioinput");
-    //   alert(inputs + "inputs");
-    //   setInputDevices(inputs);
-    //   if (inputs.length > 0) setSelectedInput(inputs[0].deviceId);
-    // });
-
-    return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
-      }
-    };
-  }, []);
 
   const requestMicrophoneAccess = async (
     deviceId?: string
   ): Promise<MediaStream> => {
     try {
-      // Request microphone access with optional deviceId
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: deviceId ? { deviceId } : true,
       });
       return stream;
     } catch (err: any) {
-      // Handle specific error scenarios
       if (err.name === "NotAllowedError") {
         alert(
           "Microphone access is denied. Please enable it in your device settings."
@@ -89,7 +74,7 @@ const AudioSettings: React.FC = () => {
       } else {
         alert("Error accessing microphone: " + err.message);
       }
-      throw err; // Rethrow the error to handle it in the calling function
+      throw err;
     }
   };
 
@@ -115,7 +100,7 @@ const AudioSettings: React.FC = () => {
       analyserRef.current = analyser;
 
       const gainNode = audioContext.createGain();
-      gainNode.gain.value = inputVolume / 100; // Use updated input volume
+      gainNode.gain.value = inputVolume / 100;
       gainNodeRef.current = gainNode;
 
       const destination = audioContext.destination;
@@ -130,7 +115,7 @@ const AudioSettings: React.FC = () => {
         analyser.getByteFrequencyData(dataArray);
         const average =
           dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
-        setInputLevel(average); // Update input level
+        setInputLevel(average);
         requestAnimationFrame(visualize);
       };
 
@@ -239,6 +224,26 @@ const AudioSettings: React.FC = () => {
       alert(`Error switching to device: ${err.message}`);
     }
   };
+
+  useEffect(() => {
+    fetchMicrophoneDevices();
+
+    const handleDeviceChange = () => {
+      fetchMicrophoneDevices();
+    };
+
+    navigator.mediaDevices.addEventListener("devicechange", handleDeviceChange);
+    return () => {
+      navigator.mediaDevices.removeEventListener(
+        "devicechange",
+        handleDeviceChange
+      );
+
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
 
   return (
     <IonPage>

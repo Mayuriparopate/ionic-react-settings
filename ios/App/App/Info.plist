@@ -6,12 +6,7 @@
 <string>We need access to your microphone for audio input.</string>
 <key>NSCameraUsageDescription</key>
 <string>We need access to your camera for video input.</string>
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>We need access to your location to provide location-based services.</string>
-<key>NSLocationAlwaysUsageDescription</key>
-<string>We need access to your location even when the app is in the background.</string>
-<key>NSMicrophoneUsageDescription</key>
-<string>We need access to the microphone for recording audio.</string>
+
 
 
 	<key>CFBundleDevelopmentRegion</key>

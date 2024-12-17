@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   IonButton,
   IonCol,
@@ -11,25 +11,46 @@ import {
   IonSelectOption,
 } from "@ionic/react";
 import { volumeLow, volumeHigh, chevronDownOutline } from "ionicons/icons";
+import { DeviceProps } from "./IAudioSection";
 
-const AudioSettingsSection = ({
-  title,
-  devices,
-  selectedDevice,
-  setSelectedDevice,
-  handleDeviceChange,
-  level,
-  renderLevelIndicator,
-  volume,
-  setVolume,
-  handleTest,
-  isTesting,
-  testLabel,
-  IndicatorLabel,
-  sliderLabel,
-  handleVolumeChange,
-  type,
-}: any) => {
+// interface DeviceProps {
+//   title: string; // Title or name of the section or component
+//   devices: Array<any>; // List of devices (assumed type, replace `Device` with the actual type if available)
+//   selectedDevice: any | null; // Currently selected device (nullable)
+//   setSelectedDevice: (device: any) => void; // Function to update the selected device
+//   handleDeviceChange: (device: any) => void; // Function to handle device change events
+//   level: number; // Level indicator value (e.g., battery or signal level)
+//   renderLevelIndicator: () => React.ReactNode; // Function to render a level indicator
+//   volume: number; // Current volume level
+//   setVolume: (volume: number) => void; // Function to update the volume
+//   handleTest: () => void; // Function to initiate testing
+//   isTesting: boolean; // Whether a test is currently in progress
+//   testLabel: string; // Label for the test button or section
+//   IndicatorLabel: string; // Label for the level indicator
+//   sliderLabel: string; // Label for the volume slider
+//   handleVolumeChange: (volume: number) => void; // Function to handle volume change events
+//   type: string; // Type of device or component
+// }
+
+const AudioSettingsSection = (props: any) => {
+  const {
+    title,
+    devices,
+    selectedDevice,
+    setSelectedDevice,
+    handleDeviceChange,
+    level,
+    renderLevelIndicator,
+    volume,
+    setVolume,
+    handleTest,
+    isTesting,
+    testLabel,
+    IndicatorLabel,
+    sliderLabel,
+    handleVolumeChange,
+    type,
+  } = props;
   const [screenIsLarge, setScreenIsLarge] = useState(false);
 
   useEffect(() => {
@@ -39,6 +60,8 @@ const AudioSettingsSection = ({
     } else {
       setScreenIsLarge(false);
     }
+
+    // console.log("devices", devices);
   }, []);
   return (
     <IonCol className={"col-layout"}>
@@ -54,10 +77,11 @@ const AudioSettingsSection = ({
                 setSelectedDevice(e.detail.value);
                 handleDeviceChange(e.detail.value); // Switch input device dynamically
               }}
+              className="audio-ion-select"
             >
               {devices.map((device: any) => (
                 <IonSelectOption key={device.deviceId} value={device.deviceId}>
-                  {device.label || "Unknown Device"}
+                  {device.label || "Default"}
                 </IonSelectOption>
               ))}
             </IonSelect>

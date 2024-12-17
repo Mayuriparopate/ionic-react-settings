@@ -146,6 +146,7 @@ ion-segment-button {
 }
 
 
+
 .audio-content {
   display: flex;
 }
@@ -168,4 +169,9 @@ ion-segment-button {
   align-items: center;
   justify-content: center;
   gap: 20px;
+}
+
+
+.audio-ion-select::part(icon) {
+  display: none;
 }
