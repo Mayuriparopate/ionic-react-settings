@@ -64,13 +64,13 @@ const AudioSettingsSection = (props: any) => {
     // console.log("devices", devices);
   }, []);
   return (
-    <IonCol className={"col-layout"}>
+    <div className={"col-layout"}>
       <IonRow>
         <IonCol size="12">
           <IonLabel>
             <strong>{title}</strong>
           </IonLabel>
-          <IonItem>
+          <IonItem className="ion-audio-select">
             <IonSelect
               value={selectedDevice}
               onIonChange={(e) => {
@@ -132,7 +132,7 @@ const AudioSettingsSection = (props: any) => {
       >
         {isTesting ? `Stop ${testLabel}` : `Test ${testLabel}`}
       </IonButton>
-    </IonCol>
+    </div>
   );
 };
 

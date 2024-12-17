@@ -160,7 +160,20 @@ ion-segment-button {
 }
 
 .col-layout {
-  max-width: 380px;
+  margin-top: 10px;
+  min-width: 290px;
+  max-width: 290px;
+}
+
+@media (min-width: 375px) {
+  .col-layout {
+    max-width: 320px; /* Width for small devices (e.g., mobile phones in landscape) */
+  }
+}
+@media (min-width: 425px) {
+  .col-layout {
+    max-width: 330px; /* Width for small devices (e.g., mobile phones in landscape) */
+  }
 }
 
 .setting-section {
@@ -174,4 +187,22 @@ ion-segment-button {
 
 .audio-ion-select::part(icon) {
   display: none;
+}
+
+@media (min-width: 786px) {
+  .row-layout {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+  }
+
+
+}
+
+
+.ion-audio-select{
+  border-bottom: 2px solid rgb(38, 37, 37);
 }
