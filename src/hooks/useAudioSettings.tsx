@@ -11,7 +11,7 @@ const useAudioSettings = () => {
   const [toastMessage, setToastMessage] = useState<string>("");
   const [showToast, setShowToast] = useState<boolean>(false);
   const [outputDevices, setOutputDevices] = useState<MediaDeviceInfo[]>([]);
-  const [selectedOutput, setSelectedOutput] = useState<string | null>("");
+  const [selectedOutput, setSelectedOutput] = useState<string | string[] | undefined>("");
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
@@ -45,7 +45,7 @@ const useAudioSettings = () => {
         (d) => d.deviceId === getOutputDeviceId
       );
       if (validOutputDevice) {
-        setSelectedOutput(storedDeviceId);
+        setSelectedOutput(storedDeviceId!);
       } else {
         localStorage.removeItem("selectedOutputDevice");
         setSelectedOutput(inputs[0]?.deviceId || "");
