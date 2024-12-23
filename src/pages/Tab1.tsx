@@ -34,6 +34,7 @@ const AudioSettings: React.FC = () => {
     handleTestMic,
     stopMicTest,
     handleVolumeChange,
+    handleDebouncedVolumeChange,
     handleDeviceSelection,
     playTestAudio,
     stopTestAudio,
@@ -115,7 +116,7 @@ const AudioSettings: React.FC = () => {
                 level={inputLevel}
                 renderLevelIndicator={renderLevelIndicator}
                 volume={inputVolume}
-                handleVolumeChange={handleVolumeChange}
+                handleVolumeChange={handleDebouncedVolumeChange}
                 handleTest={handleTestMic}
                 isTesting={isTestingMic}
                 testLabel="Mic"

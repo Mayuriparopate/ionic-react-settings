@@ -218,12 +218,18 @@ gap: 20px;
 }
 
 
+
 .audio-ion-select::part(icon) {
-display: none;
+/* padding-top: 15px; */
+padding-left: 30px;
+color: #5081f4;
+height: 30px;
+width: 24px;
+margin: 0;
+opacity: 0.75;
 }
-.audio-ion-select::part(text) {
-padding-top: 15px;
-}
+
+
 @media (min-width: 786px) {
 .row-layout {
   margin: auto;
@@ -237,8 +243,7 @@ padding-top: 15px;
 
 }
 
-
 .ion-audio-select{
-border-bottom: 1px solid rgb(99, 97, 97);
+border-bottom: 2px solid rgb(99, 97, 97);
 }
 

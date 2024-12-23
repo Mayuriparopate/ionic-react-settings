@@ -19,6 +19,8 @@ const useAudioSettings = () => {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const debouncedVolumeChange = useRef<any>(null);
 
   const fetchMicrophoneDevices = async () => {
     try {
@@ -155,6 +157,14 @@ const useAudioSettings = () => {
       setInputVolume(volume);
     }
   };
+  const handleDebouncedVolumeChange = (value: number, type:string) => {
+    if (debouncedVolumeChange.current) {
+      clearTimeout(debouncedVolumeChange.current);
+    }
+    debouncedVolumeChange.current = setTimeout(() => {
+      handleVolumeChange(value, type);
+    }, 100); // Adjust delay as needed
+  };
 
   const handleDeviceSelection = (type:string, deviceId:string, deviceLabel:string) => {
     if (type === "input") {
@@ -168,48 +178,16 @@ const useAudioSettings = () => {
     setShowToast(true);
   };
 
-  // const playTestAudio = async () => {
-  //   try {
-  //     let testAudioElement = audioElement;
 
-  //     if (!testAudioElement) {
-  //       testAudioElement = new Audio(
-  //         "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-  //       );
-  //       setAudioElement(testAudioElement);
-  //     }
-
-  //     if (testAudioElement) {
-  //       await testAudioElement.play();
-  //       setIsAudioPlaying(true);
-  //     }
-
-  //     const audioContext = new AudioContext();
-  //     audioContextRef.current = audioContext;
-
-  //     const analyser = audioContext.createAnalyser();
-  //     analyser.fftSize = 256;
-  //     analyserRef.current = analyser;
-
-  //     const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-  //     const visualize = async () => {
-  //       await resumeAudioContext();
-  //       analyser.getByteFrequencyData(dataArray);
-  //       const average =
-  //         dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
-
-  //       setOutputLevel(average);
-  //       requestAnimationFrame(visualize);
-  //     };
-
-  //     visualize();
-  //   } catch (err:any) {
-  //     console.error("Error playing test audio:", err);
-  //     alert("Error playing test audio: " + err.message);
-  //   }
-  // };
-
+  const visualize = (analyser: AnalyserNode, dataArray: Uint8Array) => {
+    analyser.getByteFrequencyData(dataArray);
+    const average =
+      dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+    setOutputLevel(average);
+    animationFrameRef.current = requestAnimationFrame(() =>
+      visualize(analyser, dataArray)
+    );
+  };
 
   const playTestAudio = async () => { 
     try {
@@ -219,7 +197,6 @@ const useAudioSettings = () => {
         testAudioElement = new Audio(
           "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
         );
-        //  testAudioElement.loop = true;
         setAudioElement(testAudioElement);
       }
 
@@ -266,29 +243,10 @@ const useAudioSettings = () => {
 
       const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-      const visualize = async () => {
-        await resumeAudioContext();
-        analyser.getByteFrequencyData(dataArray);
-        const average =
-          dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
-
-        setOutputLevel(average);
-        requestAnimationFrame(visualize);
-      };
-
-      visualize();
+      visualize(analyser, dataArray);
     } catch (err: any) {
       console.error("Error playing test audio:", err);
       alert("Error playing test audio: " + err.message);
-    }
-  };
-
-  const resumeAudioContext = async () => {
-    if (
-      audioContextRef.current &&
-      audioContextRef.current.state === "suspended"
-    ) {
-      await audioContextRef.current.resume();
     }
   };
 
@@ -297,6 +255,16 @@ const useAudioSettings = () => {
       audioElement.pause();
       audioElement.currentTime = 0;
       setIsAudioPlaying(false);
+    }
+    setOutputLevel(0);
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
     }
   };
 
@@ -357,6 +325,7 @@ const useAudioSettings = () => {
     showToast,
     toastMessage,
     setShowToast,
+    handleDebouncedVolumeChange
   };
 };
 
