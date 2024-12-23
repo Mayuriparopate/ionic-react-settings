@@ -168,7 +168,50 @@ const useAudioSettings = () => {
     setShowToast(true);
   };
 
-  const playTestAudio = async () => {
+  // const playTestAudio = async () => {
+  //   try {
+  //     let testAudioElement = audioElement;
+
+  //     if (!testAudioElement) {
+  //       testAudioElement = new Audio(
+  //         "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+  //       );
+  //       setAudioElement(testAudioElement);
+  //     }
+
+  //     if (testAudioElement) {
+  //       await testAudioElement.play();
+  //       setIsAudioPlaying(true);
+  //     }
+
+  //     const audioContext = new AudioContext();
+  //     audioContextRef.current = audioContext;
+
+  //     const analyser = audioContext.createAnalyser();
+  //     analyser.fftSize = 256;
+  //     analyserRef.current = analyser;
+
+  //     const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+  //     const visualize = async () => {
+  //       await resumeAudioContext();
+  //       analyser.getByteFrequencyData(dataArray);
+  //       const average =
+  //         dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+
+  //       setOutputLevel(average);
+  //       requestAnimationFrame(visualize);
+  //     };
+
+  //     visualize();
+  //   } catch (err:any) {
+  //     console.error("Error playing test audio:", err);
+  //     alert("Error playing test audio: " + err.message);
+  //   }
+  // };
+
+
+  const playTestAudio = async () => { 
     try {
       let testAudioElement = audioElement;
 
@@ -176,6 +219,7 @@ const useAudioSettings = () => {
         testAudioElement = new Audio(
           "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
         );
+        //  testAudioElement.loop = true;
         setAudioElement(testAudioElement);
       }
 
@@ -184,12 +228,41 @@ const useAudioSettings = () => {
         setIsAudioPlaying(true);
       }
 
+      const deviceExists = outputDevices.some(
+        (device) => device.deviceId === selectedOutput
+      );
+      if (!deviceExists) {
+        throw new Error("Selected output device is unavailable.");
+      }
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: { deviceId: { exact: selectedOutput } },
+        });
+      } catch (error: any) {
+        if (error.name === "OverconstrainedError") {
+          console.warn(
+            "Selected device constraints not satisfied, falling back to default."
+          );
+          stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        } else {
+          throw error;
+        }
+      }
+      console.log("Selected Output Device:", selectedOutput);
+      console.log("Stream Tracks:", stream?.getTracks());
+
+      mediaStreamRef.current = stream;
+
       const audioContext = new AudioContext();
       audioContextRef.current = audioContext;
 
+      const source = audioContext.createMediaStreamSource(stream);
       const analyser = audioContext.createAnalyser();
       analyser.fftSize = 256;
       analyserRef.current = analyser;
+
+      source.connect(analyser);
 
       const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
@@ -204,7 +277,7 @@ const useAudioSettings = () => {
       };
 
       visualize();
-    } catch (err:any) {
+    } catch (err: any) {
       console.error("Error playing test audio:", err);
       alert("Error playing test audio: " + err.message);
     }
