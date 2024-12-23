@@ -59,6 +59,7 @@ const AudioSettingsSection = (props: any) => {
               className="audio-ion-select"
               toggleIcon={chevronDownOutline}
               expandedIcon={chevronUpOutline}
+              labelPlacement="floating"
             >
               {devices.map((device: any) => (
                 <IonSelectOption key={device.deviceId} value={device.deviceId}>

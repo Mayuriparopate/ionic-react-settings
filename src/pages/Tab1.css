@@ -220,10 +220,7 @@ gap: 20px;
 
 
 .audio-ion-select::part(icon) {
-/* padding-top: 15px; */
-padding-left: 30px;
 color: #5081f4;
-height: 30px;
 width: 24px;
 margin: 0;
 opacity: 0.75;
