@@ -14,9 +14,9 @@ import {
 import "./Tab1.css";
 import AudioSettingsSection from "../components/AudioSettingsSection";
 import useAudioSettings from "../hooks/useAudioSettings";
-export const SESSION_TAB_LABEL = "Session";
-export const AUDIO_TAB_LABEL = "Audio";
-export const CAMERA_TAB_LABEL = "Camera";
+export const SESSION_TAB_LABEL = "call";
+export const AUDIO_TAB_LABEL = "audio";
+export const CAMERA_TAB_LABEL = "camera";
 const AudioSettings: React.FC = () => {
 
 

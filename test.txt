@@ -1,0 +1,643 @@
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { IonSegment, IonSelect, IonButton } from "@ionic/react";
+import { vi } from "vitest";
+import AudioSettingsTest from "./Test";
+
+vi.mock("@ionic/react", async () => {
+    const actual = await vi.importActual("@ionic/react");
+    return {
+      ...actual,
+      IonPage: ({ children }) => <div>{children}</div>, // Mock IonPage
+      IonHeader: ({ children }) => <div>{children}</div>, // Mock IonHeader
+      IonToolbar: ({ children }) => <div>{children}</div>, // Mock IonToolbar
+      // Add other necessary Ionic components here
+    };
+  });
+
+// Mock AudioContext globally
+global.AudioContext = vi.fn().mockImplementation(() => ({
+    createGain: vi.fn(),
+    createOscillator: vi.fn(),
+    close: vi.fn(),
+    // Add other necessary mock methods here
+  }));
+
+describe("AudioSettingsTest Component", () => {
+  beforeEach(() => {
+    Object.defineProperty(navigator, "mediaDevices", {
+      value: {
+        getUserMedia: vi.fn().mockResolvedValue({}),
+        enumerateDevices: vi.fn().mockResolvedValue([
+          { deviceId: "1", kind: "audioinput", label: "Microphone 1" },
+          { deviceId: "2", kind: "audioinput", label: "Microphone 2" },
+        ]),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      },
+      writable: true,
+    });
+  });
+
+  it("renders the component and displays default segment", () => {
+    render(<AudioSettingsTest />);
+
+    expect(screen.getByText("Settings")).toBeInTheDocument();
+    expect(screen.getByText("Audio")).toBeInTheDocument();
+    expect(screen.getByLabelText("Audio Input")).toBeInTheDocument();
+  });
+
+  it("allows segment switching", async () => {
+    render(<AudioSettingsTest />);
+
+    const callSegmentButton = screen.getByText("Call");
+    fireEvent.click(callSegmentButton);
+
+    await waitFor(() => {
+      expect(callSegmentButton).toHaveAttribute("aria-selected", "true");
+    });
+  });
+
+  it("fetches and displays audio input devices", async () => {
+    render(<AudioSettingsTest />);
+
+    const select = await waitFor(() => screen.getByLabelText("Audio Input"));
+    fireEvent.click(select);
+
+    await waitFor(() => {
+      expect(screen.getByText("Microphone 1")).toBeInTheDocument();
+      expect(screen.getByText("Microphone 2")).toBeInTheDocument();
+    });
+  });
+
+  it("handles microphone testing", async () => {
+    const mockGetUserMedia = vi
+      .spyOn(navigator.mediaDevices, "getUserMedia")
+      .mockResolvedValueOnce({ getTracks: vi.fn(() => [{ stop: vi.fn() }]) });
+
+    render(<AudioSettingsTest />);
+
+    const testMicButton = screen.getByText("Test Mic");
+    fireEvent.click(testMicButton);
+
+    await waitFor(() => {
+      expect(mockGetUserMedia).toHaveBeenCalledWith({ audio: { deviceId: "1" } });
+      expect(screen.getByText("Stop Mic")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText("Stop Mic"));
+    expect(screen.getByText("Test Mic")).toBeInTheDocument();
+  });
+
+  it("changes volume dynamically", async () => {
+    render(<AudioSettingsTest />);
+
+    const rangeInput:any = screen.getByRole("slider");
+    fireEvent.change(rangeInput, { target: { value: 75 } });
+
+    await waitFor(() => {
+      expect(rangeInput.value).toBe("75");
+    });
+  });
+
+  it("shows toast messages on device selection", async () => {
+    render(<AudioSettingsTest />);
+
+    const select = await waitFor(() => screen.getByLabelText("Audio Input"));
+    fireEvent.click(select);
+    fireEvent.click(screen.getByText("Microphone 2"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Selected input device: Microphone 2")).toBeInTheDocument();
+    });
+  });
+
+  it("handles errors when microphone access is denied", async () => {
+    vi.spyOn(navigator.mediaDevices, "getUserMedia").mockRejectedValueOnce({
+      name: "NotAllowedError",
+    });
+
+    render(<AudioSettingsTest />);
+
+    const testMicButton = screen.getByText("Test Mic");
+    fireEvent.click(testMicButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Microphone access is denied/i)).toBeInTheDocument();
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React from 'react';
+// import { render, fireEvent, screen, act } from '@testing-library/react';
+import { vi } from 'vitest';
+// import AudioSettingsTest from './Test';
+
+
+// // Mock necessary Ionic components
+// vi.mock('@ionic/react', () => ({
+//   IonPage: ({ children }: any) => <div>{children}</div>,
+//   IonHeader: ({ children }: any) => <div>{children}</div>,
+//   IonToolbar: ({ children }: any) => <div>{children}</div>,
+//   IonTitle: ({ children }: any) => <h1>{children}</h1>,
+//   IonContent: ({ children }: any) => <div>{children}</div>,
+//   IonLabel: ({ children }: any) => <label>{children}</label>,
+//   IonRow: ({ children }: any) => <div>{children}</div>,
+//   IonCol: ({ children }: any) => <div>{children}</div>, // Add this mock
+//   IonSegment: ({ children, value, onIonChange }: any) => (
+//     <div>
+//       {React.Children.map(children, (child) =>
+//         React.cloneElement(child, {
+//           onClick: () => onIonChange({ detail: { value: child.props.value } }),
+//         })
+//       )}
+//     </div>
+//   ),
+//   IonSegmentButton: ({ children, value }: any) => <button data-value={value}>{children}</button>,
+//   IonToast: ({ isOpen, message }: any) => (isOpen ? <div>{message}</div> : null),
+//   IonSelect: ({ value, onIonChange, children }: any) => (
+//     <select
+//       value={value}
+//       onChange={(e) => onIonChange({ detail: { value: e.target.value } })}
+//     >
+//       {children}
+//     </select>
+//   ),
+//   IonSelectOption: ({ value, children }: any) => <option value={value}>{children}</option>,
+//   IonButton: ({ children, onClick }: any) => <button onClick={onClick}>{children}</button>,
+//   IonRange: ({ value, onIonChange }: any) => (
+//     <input
+//       type="range"
+//       value={value}
+//       onChange={(e) => onIonChange({ detail: { value: Number(e.target.value) } })}
+//     />
+//   ),
+//   IonIcon: ({ children }: any) => <div>{children}</div>,
+// }));
+
+
+
+// global.navigator.mediaDevices = {
+//     getUserMedia: vi.fn().mockResolvedValue({
+//       getTracks: vi.fn(() => [{ stop: vi.fn() }]),
+//     }),
+//     enumerateDevices: vi.fn().mockResolvedValue([
+//       { deviceId: 'default', kind: 'audioinput', label: 'Default Microphone' },
+//       { deviceId: 'mic1', kind: 'audioinput', label: 'Microphone 1' },
+//     ]),
+//   } as unknown as MediaDevices;
+
+// describe('AudioSettingsTest Component', () => {
+
+//     beforeAll(() => {
+//         global.AudioContext = vi.fn().mockImplementation(() => ({
+//           createMediaStreamSource: vi.fn(),
+//           createAnalyser: vi.fn(() => ({
+//             fftSize: 256,
+//             getByteFrequencyData: vi.fn(),
+//           })),
+//           createGain: vi.fn(() => ({
+//             gain: { value: 1 },
+//             connect: vi.fn(),
+//           })),
+//           close: vi.fn(),
+//           destination: {},
+//         }));
+      
+//         global.navigator.mediaDevices = {
+//           getUserMedia: vi.fn(() =>
+//             Promise.resolve({
+//               getTracks: vi.fn(() => [
+//                 { stop: vi.fn() },
+//               ]),
+//             })
+//           ),
+//           enumerateDevices: vi.fn(() =>
+//             Promise.resolve([
+//               { deviceId: 'default', kind: 'audioinput', label: 'Default Microphone' },
+//               { deviceId: 'mic1', kind: 'audioinput', label: 'Microphone 1' },
+//             ])
+//           ),
+//         } as unknown as MediaDevices;
+//       });
+
+//   beforeEach(() => {
+//     vi.clearAllMocks();
+//   });
+
+//   it('renders the component with default settings', () => {
+//     render(<AudioSettingsTest />);
+
+//     // Verify the header is displayed
+//     expect(screen.getByText('Settings')).toBeInTheDocument();
+
+//     // Verify the default segment
+//     expect(screen.getByText('Audio')).toBeInTheDocument();
+
+//     // // Verify the input volume and test mic button
+//     // expect(screen.getByText('Input Volumes')).toBeInTheDocument();
+//     // expect(screen.getByText('Test Mic')).toBeInTheDocument();
+//   });
+
+//   it('switches segments when segment buttons are clicked', () => {
+//     render(<AudioSettingsTest />);
+
+//     const audioButton = screen.getByText('Audio');
+//     const cameraButton = screen.getByText('Camera');
+
+//     act(() => {
+//       fireEvent.click(cameraButton);
+//     });
+
+//     // Verify the segment is updated
+//     expect(screen.getByText('Camera')).toBeInTheDocument();
+
+//     act(() => {
+//       fireEvent.click(audioButton);
+//     });
+
+//     // Verify the segment switches back
+//     expect(screen.getByText('Audio')).toBeInTheDocument();
+//   });
+
+//   it('handles input device selection', () => {
+//     render(<AudioSettingsTest />);
+
+//     const select = screen.getByRole('combobox');
+
+//     act(() => {
+//       fireEvent.change(select, { target: { value: 'device1' } });
+//     });
+
+//     // Verify the selected value
+//     expect(select).toHaveValue('device1');
+//   });
+
+//   it('adjusts input volume slider', () => {
+//     render(<AudioSettingsTest />);
+
+//     const range = screen.getByRole('slider');
+
+//     act(() => {
+//       fireEvent.change(range, { target: { value: '50' } });
+//     });
+
+//     // Verify the slider value
+//     expect(range).toHaveValue('50');
+//   });
+
+//   it('toggles microphone testing', async () => {
+//     render(<AudioSettingsTest />);
+
+//     const button = screen.getByText('Test Mic');
+
+//     // Start testing mic
+//     await act(async () => {
+//       fireEvent.click(button);
+//     });
+
+//     expect(screen.getByText('Stop Mic')).toBeInTheDocument();
+
+//     // Stop testing mic
+//     await act(async () => {
+//       fireEvent.click(button);
+//     });
+
+//     expect(screen.getByText('Test Mic')).toBeInTheDocument();
+//   });
+
+// });
+
+
+
+
+// import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+// import AudioSettingsTest from "./Test";
+// import { vi } from 'vitest';
+
+// // Mock navigator.mediaDevices
+// const mockMediaDevices = {
+//   enumerateDevices: vi.fn(),
+//   getUserMedia: vi.fn(),
+//   addEventListener: vi.fn(),
+//   removeEventListener: vi.fn(),
+// };
+// Object.defineProperty(global.navigator, "mediaDevices", {
+//   value: mockMediaDevices,
+// });
+
+// // Mock localStorage
+// const mockLocalStorage = (() => {
+//   let store:any = {};
+//   return {
+//     getItem: vi.fn((key) => store[key]),
+//     setItem: vi.fn((key, value) => {
+//       store[key] = value.toString();
+//     }),
+//     removeItem: vi.fn((key) => delete store[key]),
+//     clear: vi.fn(() => {
+//       store = {};
+//     }),
+//   };
+// })();
+// Object.defineProperty(global, "localStorage", { value: mockLocalStorage });
+
+// describe("AudioSettingsTest Component", () => {
+//   beforeEach(() => {
+//     vi.clearAllMocks();
+//     mockMediaDevices.enumerateDevices.mockResolvedValue([
+//       { deviceId: "1", kind: "audioinput", label: "Microphone 1" },
+//       { deviceId: "2", kind: "audioinput", label: "Microphone 2" },
+//     ]);
+//     mockMediaDevices.getUserMedia.mockResolvedValue(new MediaStream());
+//   });
+
+//   test("fetchMicrophoneDevices sets input devices and selected input", async () => {
+//     const { getByText } = render(<AudioSettingsTest />);
+//     await waitFor(() => getByText("Microphone 1"));
+//     expect(mockMediaDevices.enumerateDevices).toHaveBeenCalled();
+//     expect(screen.getByDisplayValue("Microphone 1")).toBeInTheDocument();
+//   });
+
+//   test("handleTestMic starts and stops microphone test", async () => {
+//     const { getByText } = render(<AudioSettingsTest />);
+//     const testMicButton = getByText("Test Mic");
+//     fireEvent.click(testMicButton);
+
+//     await waitFor(() => expect(testMicButton.textContent).toBe("Stop Mic"));
+
+//     fireEvent.click(testMicButton);
+//     expect(testMicButton.textContent).toBe("Test Mic");
+//   });
+
+//   test("stopMicTest resets input level and cleans up resources", async () => {
+//     const { getByText } = render(<AudioSettingsTest />);
+//     const testMicButton = getByText("Test Mic");
+//     fireEvent.click(testMicButton);
+
+//     fireEvent.click(testMicButton);
+//     expect(screen.queryByText("Stop Mic")).not.toBeInTheDocument();
+//   });
+
+//   test("handleVolumeChange adjusts volume correctly", async () => {
+//     const { getByLabelText } = render(<AudioSettingsTest />);
+//     const volumeSlider:any = getByLabelText("Input Volumes");
+
+//     fireEvent.change(volumeSlider, { target: { value: "50" } });
+//     expect(volumeSlider.value).toBe("50");
+//   });
+
+//   test("handleDeviceSelection updates selected device and shows toast", async () => {
+//     const { getByText } = render(<AudioSettingsTest />);
+//     const selectInput = screen.getByRole("combobox");
+
+//     fireEvent.change(selectInput, { target: { value: "2" } });
+//     await waitFor(() =>
+//       expect(mockLocalStorage.setItem).toHaveBeenCalledWith("selectedAudioDevice", "2")
+//     );
+//     expect(getByText("Selected input device: Microphone 2")).toBeInTheDocument();
+//   });
+
+//   test("handleDeviceChange correctly updates input device", async () => {
+//     render(<AudioSettingsTest />);
+//     const selectInput = screen.getByRole("combobox");
+
+//     fireEvent.change(selectInput, { target: { value: "1" } });
+//     await waitFor(() =>
+//       expect(mockLocalStorage.setItem).toHaveBeenCalledWith("selectedAudioDevice", "1")
+//     );
+//   });
+
+//   test("handleSelectChange updates selectedInput and triggers device change", async () => {
+//     render(<AudioSettingsTest />);
+//     const selectInput = screen.getByRole("combobox");
+
+//     fireEvent.change(selectInput, { target: { value: "2" } });
+//     expect(mockLocalStorage.setItem).toHaveBeenCalledWith("selectedAudioDevice", "2");
+//   });
+// });
+
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import AudioSettingsTest from './Test';
+
+
+test('should display available input devices in select option', async () => {
+  // Mock navigator.mediaDevices.enumerateDevices to return a list of input devices
+  const mockDevices:any = [
+    { deviceId: '1', kind: 'audioinput', label: 'Microphone 1' },
+    { deviceId: '2', kind: 'audioinput', label: 'Microphone 2' },
+  ];
+
+  vi.spyOn(navigator.mediaDevices, 'enumerateDevices').mockResolvedValue(mockDevices);
+
+  render(<AudioSettingsTest />);
+
+  // Wait for devices to be loaded
+  await waitFor(() => screen.getByText('Microphone 1'));
+
+  // Ensure the select dropdown contains the devices
+  expect(screen.getByText('Microphone 1')).toBeInTheDocument();
+  expect(screen.getByText('Microphone 2')).toBeInTheDocument();
+});
+
+test('should update selected input device on select change', async () => {
+  const mockDevices:any = [
+    { deviceId: '1', kind: 'audioinput', label: 'Microphone 1' },
+    { deviceId: '2', kind: 'audioinput', label: 'Microphone 2' },
+  ];
+
+  vi.spyOn(navigator.mediaDevices, 'enumerateDevices').mockResolvedValue(mockDevices);
+  const { container } = render(<AudioSettingsTest />);
+
+  // Wait for devices to be loaded
+  await waitFor(() => screen.getByText('Microphone 1'));
+
+  // Select a new device
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: '2' } });
+
+  // Check if the selected device has been updated
+  expect(container.querySelector('select')?.value).toBe('2');
+});
+
+
+test('should toggle mic test on button click', async () => {
+    render(<AudioSettingsTest />);
+  
+    const micTestButton = screen.getByText('Test Mic');
+    
+    // Initial state should be 'Test Mic'
+    expect(micTestButton).toBeInTheDocument();
+  
+    // Click to start testing the mic
+    fireEvent.click(micTestButton);
+    
+    // After click, button should display 'Stop Mic'
+    expect(screen.getByText('Stop Mic')).toBeInTheDocument();
+  
+    // Click again to stop testing the mic
+    fireEvent.click(screen.getByText('Stop Mic'));
+  
+    // Button should return to 'Test Mic'
+    expect(screen.getByText('Test Mic')).toBeInTheDocument();
+  });
+  
+
+  test('should change input volume when slider is adjusted', async () => {
+    render(<AudioSettingsTest />);
+  
+    const slider = screen.getByRole('slider');
+    
+    // Initially, the volume should be 50 (default state)
+    expect(slider).toHaveValue(50);
+  
+    // Move the slider to a new value
+    fireEvent.change(slider, { target: { value: 75 } });
+  
+    // Ensure the value has updated
+    expect(slider).toHaveValue(75);
+  });
+  
+
+
+  --------------------------------------------------------------------------------------------------------------------
+
+import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { vi } from "vitest";
+import AudioSettingsTest from "./Test";
+
+
+beforeAll(() => {
+    global.MediaStream = class {
+      constructor() {
+        this.getTracks = vi.fn(() => []); // Mock `getTracks` method
+      }
+    };
+  
+    global.navigator.mediaDevices = {
+      getUserMedia: vi.fn().mockResolvedValue(new MediaStream()),
+      enumerateDevices: vi.fn().mockResolvedValue([
+        {
+          kind: "audioinput",
+          deviceId: "device1",
+          label: "Microphone 1",
+        },
+        {
+          kind: "audioinput",
+          deviceId: "device2",
+          label: "Microphone 2",
+        },
+      ]), // Mock devices
+    };
+  
+    global.AudioContext = vi.fn().mockImplementation(() => ({
+      createGain: vi.fn(),
+      close: vi.fn(),
+      createMediaStreamSource: vi.fn(),
+      createAnalyser: vi.fn(),
+      destination: {},
+    }));
+  });
+  
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
+
+it("renders the component and displays default segment", () => {
+  render(<AudioSettingsTest />);
+
+  expect(screen.getByText("Settings")).toBeInTheDocument();
+  expect(screen.getByText("Audio")).toBeInTheDocument();
+  expect(screen.getByText("Audio Input")).toBeInTheDocument();
+});
+
+it("handles microphone testing", async () => {
+  const mockGetUserMedia = vi
+    .spyOn(navigator.mediaDevices, "getUserMedia")
+    .mockResolvedValueOnce({ getTracks: vi.fn(() => [{ stop: vi.fn() }]) });
+
+  console.log(mockGetUserMedia, "mockGetUserMedia");
+
+  render(<AudioSettingsTest />);
+
+  const testMicButton = screen.getByText("Test Mic");
+  fireEvent.click(testMicButton);
+
+  expect(screen.getByText("Stop Mic")).toBeInTheDocument(); // Button text should be "Stop Mic"
+
+  fireEvent.click(screen.getByText("Stop Mic"));
+  expect(screen.getByText("Test Mic")).toBeInTheDocument();
+});
+
+
+it("changes volume dynamically", async () => {
+    render(<AudioSettingsTest />);
+
+    const rangeInput:any = screen.getByTestId("input-volume-slider");
+    fireEvent.change(rangeInput, { target: { value: 70} });
+
+    await waitFor(() => {
+      expect(rangeInput.value).toBe(70);
+    });
+  });
+
+
+
+
+  it("selects an input device", async () => {
+    // Mock input devices
+    const mockDevices = [
+      { kind: "audioinput", deviceId: "device1", label: "Microphone 1" },
+      { kind: "audioinput", deviceId: "device2", label: "Microphone 2" },
+    ];
+    
+    // Mock the enumerateDevices method to return mock devices
+    global.navigator.mediaDevices.enumerateDevices = vi.fn().mockResolvedValue(mockDevices);
+  
+    render(<AudioSettingsTest />);
+  
+    // Wait for the input devices to be loaded and the select dropdown to appear
+    await waitFor(() => {
+      expect(screen.getByRole("combobox")).toBeInTheDocument();
+    });
+  
+    // Open the IonSelect dropdown
+    const selectInput = screen.getByRole("combobox");
+    fireEvent.click(selectInput);
+  
+    // Select the first device ("Microphone 1")
+    const option1 = screen.getByText("Microphone 1");
+    fireEvent.click(option1);
+  
+    // Wait for the UI to reflect the selected device
+    await waitFor(() => {
+      expect(screen.getByText("Microphone 1")).toBeInTheDocument();
+    });
+  
+    // Verify the selected device ID is reflected in the component's state
+    expect(screen.getByRole("combobox")).toHaveValue("device1");
+  });
