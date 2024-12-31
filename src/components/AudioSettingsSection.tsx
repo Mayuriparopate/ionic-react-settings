@@ -41,6 +41,7 @@ const AudioSettingsSection = (props: any) => {
     }
   }, []);
   const handleSelectChange = (deviceId: string) => {
+    console.log("Selected Value:",deviceId); 
     localStorage.setItem("selectedAudioDevice", deviceId);
     setSelectedDevice(deviceId);
     handleDeviceChange(deviceId);
@@ -60,6 +61,7 @@ const AudioSettingsSection = (props: any) => {
               toggleIcon={chevronDownOutline}
               expandedIcon={chevronUpOutline}
               labelPlacement="floating"
+              role="combobox"
             >
               {devices.map((device: any) => (
                 <IonSelectOption key={device.deviceId} value={device.deviceId}>
@@ -96,6 +98,7 @@ const AudioSettingsSection = (props: any) => {
             onIonChange={(e) =>
               handleVolumeChange(e.detail.value as number, type)
             }
+            role="slider"
           >
             <IonIcon slot="start" color="primary" icon={volumeLow} />
             <IonIcon slot="end" color="primary" icon={volumeHigh} />
