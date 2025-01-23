@@ -1,0 +1,213 @@
+.tabs-header {
+  display: flex;
+  background-color: #d4e7f2;
+  justify-content: space-between;
+  width: 100%;
+ 
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #0076c0;
+  background-color: #d4e7f2;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #0076C0;
+  /* padding: 10px; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab-item.active {
+  background-color: #76628f;
+  color: #ffffff;
+}
+
+.ion-segment-button {
+  border: none;
+  box-shadow: none;
+}
+
+.ion-segment-button.ion-activated {
+  box-shadow: none;
+  border: none;
+  background: none;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab-icon {
+  font-size: 24px; /* Consistent size for all icons */
+  width: 24px; /* Set fixed width */
+  height: 24px; /* Set fixed height */
+  flex-shrink: 0; /* Prevent the icon from shrinking */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-label {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab-item:hover {
+  background-color: #76628f;
+}
+/* 
+.search-filter-container {
+  display: flex;
+  align-items: center;
+  background-color: #76628f;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background-color: #ffffff;
+  padding: 15px 10px;
+  border-radius: 5px;
+}
+
+.search-icon {
+  font-size: 18px;
+  color: #0076c0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #000000;
+  margin-left: 8px;
+}
+
+.clear-btn {
+  font-size: 14px;
+  color: #0076c0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.filter-icons {
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+  background-color: white;
+  padding: 11px;
+  border-radius: 6px;
+}
+
+
+.filter-icon {
+  font-size: 22px;
+  color: #0076c0;;
+  cursor: pointer;
+} */
+
+.search-filter-container {
+  display: flex;
+  align-items: center;
+  background-color: #76628f;
+  padding: 10px;
+  border-radius: 5px;
+  flex-wrap: wrap; /* Ensure the icons wrap if there is insufficient space */
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background-color: #ffffff;
+  padding: 10px 10px;
+  border-radius: 5px;
+  min-width: 0; /* Prevents overflow due to fixed widths */
+}
+
+.search-icon {
+  font-size: 18px;
+  color: #0076c0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #000000;
+  margin-left: 8px;
+  min-width: 0; /* Prevent overflow */
+}
+
+.clear-btn {
+  font-size: 14px;
+  color: #0076c0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.filter-icons {
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 6px;
+  flex-wrap: wrap; /* Ensures the filter icons will wrap on smaller screens */
+}
+
+.filter-icon {
+  font-size: 22px;
+  color: #0076c0;
+  cursor: pointer;
+}
+
+/* Media Query for 320px screens */
+@media (max-width: 320px) {
+
+  
+  .search-input {
+      font-size: 14px; /* Slightly smaller text size */
+      
+  }
+
+  .filter-icons {
+      margin-left: 5px;
+      gap: 8px;
+  }
+  
+  .filter-icon {
+     
+  }
+
+  .clear-btn {
+      font-size: 12px;
+      padding: 4px;
+  }
+}
+

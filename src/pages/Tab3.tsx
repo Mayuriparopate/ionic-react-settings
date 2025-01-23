@@ -1,279 +1,257 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonItem,
-  IonLabel,
-  IonRange,
-  IonButton,
-  IonCheckbox,
-  IonRow,
-  IonCol,
-  IonToggle,
-  IonIcon,
-  IonSegment,
-  IonSegmentButton,
-} from "@ionic/react";
-import { volumeLow, volumeHigh } from "ionicons/icons"; // Import volume icons
+// import React, { useState } from "react";
+// import {
+//   IonPage,
+//   IonContent,
+//   IonHeader,
+//   IonToolbar,
+//   IonTitle,
+//   IonSearchbar,
+//   IonSegment,
+//   IonSegmentButton,
+//   IonLabel,
+//   IonIcon,
+// } from "@ionic/react";
+// import {
+//   mapOutline,
+//   calendarOutline,
+//   micOutline,
+//   videocamOutline,
+//   funnelOutline,
+// } from "ionicons/icons";
 import "./Tab3.css";
-import CommonSelect from "../components/CommonSelect";
 
-const Tabs3: React.FC = () => {
-  const [inputDevices, setInputDevices] = useState<MediaDeviceInfo[]>([]);
-  const [outputDevices, setOutputDevices] = useState<MediaDeviceInfo[]>([]);
-  const [selectedInput, setSelectedInput] = useState<string>("");
-  const [selectedOutput, setSelectedOutput] = useState<string>("");
-  const [inputVolume, setInputVolume] = useState<number>(50);
-  const [outputVolume, setOutputVolume] = useState<number>(50);
-  const [inputLevel, setInputLevel] = useState<number>(0);
-  const [outputLevel, setOutputLevel] = useState<number>(0);
-  const [backgroundNoiseRemoval, setBackgroundNoiseRemoval] = useState(false);
-  const [autoAdjustMic, setAutoAdjustMic] = useState(false);
-  const [tempUnmute, setTempUnmute] = useState(true);
-  const [isTestingMic, setIsTestingMic] = useState(false);
-  const [segment, setSegment] = useState<string>("audio");
+// const Tabs3: React.FC = () => {
+//   const [selectedTab, setSelectedTab] = useState("map");
 
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const mediaStreamRef = useRef<MediaStream | null>(null);
+//   return (
+//     <IonPage>
+//       <IonHeader>
+//         <IonToolbar color="primary">
+//           <IonTitle>Languages</IonTitle>
+//         </IonToolbar>
+//       </IonHeader>
+//       <IonContent>
+//         <div className="languages-container">
+//           {/* Sidebar */}
+//           <div className="languages-sidebar">
+//             {/* Tabs */}
+//             <IonSegment
+//               mode="md"
+//               value={selectedTab}
+//               onIonChange={(e: any) => setSelectedTab(e.detail.value!)}
+//               className="tabs-container"
+//             >
+//               <IonSegmentButton value="map">
+//                 <IonIcon icon={mapOutline} />
+//                 <IonLabel>Map</IonLabel>
+//               </IonSegmentButton>
+//               <IonSegmentButton value="schedule">
+//                 <IonIcon icon={calendarOutline} />
+//                 <IonLabel>Schedule</IonLabel>
+//               </IonSegmentButton>
+//               <IonSegmentButton value="voice">
+//                 <IonIcon icon={micOutline} />
+//                 <IonLabel>Voice</IonLabel>
+//               </IonSegmentButton>
+//               <IonSegmentButton value="video">
+//                 <IonIcon icon={videocamOutline} />
+//                 <IonLabel>Video</IonLabel>
+//               </IonSegmentButton>
+//               <IonSegmentButton value="filter">
+//                 <IonIcon icon={funnelOutline} />
+//                 <IonLabel>Filter</IonLabel>
+//               </IonSegmentButton>
+//             </IonSegment>
 
-  const selectOption = (data: any) => {
-    setSelectedInput(data);
-    console.log(data, "data");
-    localStorage.setItem("selectValue", data);
-  };
+//             {/* Search */}
+//             <IonSearchbar placeholder="Search"></IonSearchbar>
+//             {/* Language List */}
+//             <div className="languages-list">
+//               {/* Replace this static list with dynamic data */}
+//               <p>Acholi (Sudan-Uganda)</p>
+//               <p>Afar</p>
+//               <p>Afghani - Pashto</p>
+//               <p>Afrikaans</p>
+//               <p>Akan</p>
+//             </div>
+//           </div>
+//         </div>
+//       </IonContent>
+//     </IonPage>
+//   );
+// };
 
-  useEffect(() => {
-    navigator.mediaDevices.enumerateDevices().then((devices) => {
-      const inputs = devices.filter((device) => device.kind === "audioinput");
-      const outputs = devices.filter((device) => device.kind === "audiooutput");
-      setInputDevices(inputs);
-      setOutputDevices(outputs);
-      if (inputs.length > 0) setSelectedInput(inputs[0].deviceId);
-      if (outputs.length > 0) setSelectedOutput(outputs[0].deviceId);
-    });
+// export default Tabs3;
 
-    return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
-      }
-    };
-  }, []);
+// import React, { useState } from "react";
+// import { IonSegment, IonSegmentButton, IonLabel, IonIcon } from "@ionic/react";
+// import { starOutline, mapOutline } from "ionicons/icons";
 
-  const handleTestMic = async () => {
-    if (isTestingMic) {
-      stopMicTest();
-      return;
-    }
+// const Tabs3: React.FC = () => {
+//   const [selectedTab, setSelectedTab] = useState("languages");
 
-    setIsTestingMic(true);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { deviceId: selectedInput },
-      });
-      mediaStreamRef.current = stream;
+//   return (
+//     <div className="tabs-container">
+//       <IonSegment
+//         mode="md"
+//         value={selectedTab}
+//         onIonChange={(e: any) => setSelectedTab(e.detail.value!)}
+//       >
+//         <IonSegmentButton value="languages" className="tab-button">
+//           <IonLabel>Languages</IonLabel>
+//         </IonSegmentButton>
+//         <IonSegmentButton value="favorites" className="tab-button">
+//           <IonIcon icon={starOutline} />
+//           <IonLabel>Favorites</IonLabel>
+//         </IonSegmentButton>
+//         <IonSegmentButton value="map" className="tab-button">
+//           <IonIcon icon={mapOutline} />
+//           <IonLabel>Map</IonLabel>
+//         </IonSegmentButton>
+//       </IonSegment>
+//     </div>
+//   );
+// };
 
-      const audioContext = new AudioContext();
-      audioContextRef.current = audioContext;
-      const source = audioContext.createMediaStreamSource(stream);
-      const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 256;
-      analyserRef.current = analyser;
+// export default Tabs3;
+//
+// import React, { useState } from "react";
+// import { IonIcon, IonLabel, IonSegment, IonSegmentButton } from "@ionic/react";
+// import {
+//   searchOutline,
+//   funnelOutline,
+//   ellipsisVertical,
+//   star,
+//   mapOutline,
+//   starOutline,
+// } from "ionicons/icons";
+// import "./Tab3.css";
 
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
-      source.connect(analyser);
+// const Tab3: React.FC = () => {
+//   const [activeTab, setActiveTab] = useState("languages");
 
-      const visualize = () => {
-        analyser.getByteFrequencyData(dataArray);
-        const average =
-          dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
-        setInputLevel(average); // Update input level
-        requestAnimationFrame(visualize);
-      };
-      visualize();
-    } catch (err: any) {
-      alert("Error accessing microphone: " + err.message);
-      setIsTestingMic(false);
-    }
-  };
+//   return (
+//     <>
+//       <div className="tab3-container">
+//         {/* Tabs */}
+//         <div className="tabs-header">
+//           <div
+//             className={`tab-item ${activeTab === "languages" ? "active" : ""}`}
+//             onClick={() => setActiveTab("languages")}
+//           >
+//             <span>Languages</span>
+//           </div>
+//           <div
+//             className={`tab-item ${activeTab === "favorites" ? "active" : ""}`}
+//             onClick={() => setActiveTab("favorites")}
+//           >
+//             <IonIcon icon={star} className="tab-icon" />
+//             <span>Favorites</span>
+//           </div>
+//           <div
+//             className={`tab-item ${activeTab === "map" ? "active" : ""}`}
+//             onClick={() => setActiveTab("map")}
+//           >
+//             <IonIcon icon={mapOutline} className="tab-icon" />
+//             <span>Map</span>
+//           </div>
+//         </div>
 
-  const stopMicTest = () => {
-    setIsTestingMic(false);
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
-    if (mediaStreamRef.current) {
-      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
-    }
-    setInputLevel(0); // Reset input level
-  };
+//         {/* Search and Filter */}
+//         <div className="search-filter-container">
+//           <div className="search-bar">
+//             <IonIcon icon={searchOutline} className="search-icon" />
+//             <input type="text" placeholder="China" className="search-input" />
+//             <button className="clear-btn">✕</button>
+//           </div>
+//           <div className="filter-icons">
+//             <IonIcon icon={funnelOutline} className="filter-icon" />
+//             <IonIcon icon={ellipsisVertical} className="filter-icon" />
+//           </div>
+//         </div>
+//       </div>
+//       {/* <div className="tabs-container">
+//         <IonSegment>
+//                mode="md"
+//                value={selectedTab}
+//                onIonChange={(e: any) => setActiveTab(e.detail.value!)}
 
-  const handleTestSpeaker = () => {
-    const audio = new Audio("/assets/sounds/beep-07.mp3"); // Use local sound file
-    audio.volume = outputVolume / 100;
-    audio
-      .play()
-      .then(() => setOutputLevel(100)) // Simulate output level
-      .catch((err) => alert("Error playing sound: " + err.message));
-    setTimeout(() => setOutputLevel(0), 1000); // Reset after 1 second
-  };
+//               <IonSegmentButton value="languages" className="tab-button">
+//                  <IonLabel>Languages</IonLabel>
+//               </IonSegmentButton>
+//               <IonSegmentButton value="favorites" className="tab-button">
+//                <IonIcon icon={starOutline}/>
+//               <IonLabel>Favorites</IonLabel>
+//                </IonSegmentButton>
+//               <IonSegmentButton value="map" className="tab-button">
+//                 <IonIcon icon={mapOutline}/>
+//                 <IonLabel>Map</IonLabel>
+//               </IonSegmentButton>
+//             </IonSegment>
+//         </div> */}
+//     </>
+//   );
+// };
 
-  const renderLevelIndicator = (level: number) => {
-    return (
-      <div
-        className="level-indicator"
-        style={{
-          display: "flex",
-          gap: "20px",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="level-bar"
-            style={{
-              backgroundColor: level > i * 5 ? "#007bff" : "#ccc",
-            }}
-          />
-        ))}
-      </div>
-    );
-  };
+// export default Tab3;
+import React, { useState } from "react";
+import { IonIcon, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
+import {
+  searchOutline,
+  funnelOutline,
+  ellipsisVertical,
+  starOutline,
+  mapOutline,
+} from "ionicons/icons";
+import "./Tab3.css";
+
+const Tab3: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("languages");
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Settings</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding">
-        <IonSegment
-          value={segment}
-          onIonChange={(e) => setSegment(e.detail.value! as string)}
-          className="responsive-segment"
+    <div className="tab3-container">
+      {/* Tabs using IonSegment */}
+      <IonSegment
+        value={activeTab}
+        className="tabs-header"
+        onIonChange={(e: any) => setActiveTab(e.detail.value!)}
+      >
+        <IonSegmentButton
+          value="languages"
+          className={`tab-item ${activeTab === "languages" ? "active" : ""}`}
         >
-          <IonSegmentButton value="audio">
-            <IonLabel>Audio</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="camera">
-            <IonLabel>Camera</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="general">
-            <IonLabel>General</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
-        {segment === "audio" && (
-          <>
-            <IonRow>
-              {/* Audio Input Section */}
-              <IonCol size="12" size-lg="6">
-                <IonItem>
-                  <IonLabel>
-                    <strong>Audio Input</strong>
-                  </IonLabel>
-                </IonItem>
-                <CommonSelect
-                  label="Input Device"
-                  value={selectedInput}
-                  options={inputDevices}
-                  onChange={setSelectedInput}
-                />
-                <IonItem>
-                  <IonLabel>Input Level:</IonLabel>
-                  <div className="level-indicator-container">
-                    {renderLevelIndicator(inputLevel)}
-                  </div>
-                </IonItem>
-                <IonItem>
-                  <IonLabel>Input Volume:</IonLabel>
-                  <IonRange
-                    min={0}
-                    max={100}
-                    value={inputVolume}
-                    onIonChange={(e) =>
-                      setInputVolume(e.detail.value as number)
-                    }
-                  >
-                    <IonIcon slot="start" icon={volumeLow} />
-                    <IonIcon slot="end" icon={volumeHigh} />
-                  </IonRange>
-                </IonItem>
-                <IonButton expand="block" onClick={handleTestMic}>
-                  {isTestingMic ? "Stop Mic Test" : "Test Mic"}
-                </IonButton>
-              </IonCol>
+          <IonLabel>Languages</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton
+          value="favorites"
+          className={`tab-item ${activeTab === "favorites" ? "active" : ""}`}
+        >
+          <IonIcon icon={starOutline} className="tab-icon" />
+          <IonLabel>Favorites</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton
+          value="map"
+          className={`tab-item ${activeTab === "map" ? "active" : ""}`}
+        >
+          <IonIcon icon={mapOutline} className="tab-icon" />
+          <IonLabel>Map</IonLabel>
+        </IonSegmentButton>
+      </IonSegment>
 
-              {/* Audio Output Section */}
-              <IonCol size="12" size-lg="6">
-                <IonItem>
-                  <IonLabel>
-                    <strong>Audio Output</strong>
-                  </IonLabel>
-                </IonItem>
-                <CommonSelect
-                  label="Output Device"
-                  value={selectedOutput}
-                  options={outputDevices}
-                  onChange={selectOption}
-                />
-                <IonItem className="level-item">
-                  <IonLabel>Output Level:</IonLabel>
-                  <div className="level-indicator-container">
-                    {renderLevelIndicator(outputLevel)}
-                  </div>
-                </IonItem>
-                <IonItem>
-                  <IonLabel>Output Volume:</IonLabel>
-                  <IonRange
-                    min={0}
-                    max={100}
-                    value={outputVolume}
-                    onIonChange={(e) =>
-                      setOutputVolume(e.detail.value as number)
-                    }
-                  >
-                    <IonIcon slot="start" icon={volumeLow} />
-                    <IonIcon slot="end" icon={volumeHigh} />
-                  </IonRange>
-                </IonItem>
-                <IonButton expand="block" onClick={handleTestSpeaker}>
-                  Test Speaker
-                </IonButton>
-              </IonCol>
-            </IonRow>
-            <IonItem>
-              <IonLabel>Background Noise Removal</IonLabel>
-              <IonToggle
-                checked={backgroundNoiseRemoval}
-                onIonChange={(e) => setBackgroundNoiseRemoval(e.detail.checked)}
-              />
-            </IonItem>
-            <IonItem>
-              <IonCheckbox
-                checked={autoAdjustMic}
-                onIonChange={(e) => setAutoAdjustMic(e.detail.checked)}
-              />
-              <IonLabel>Automatically adjust microphone volume</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonCheckbox
-                checked={tempUnmute}
-                onIonChange={(e) => setTempUnmute(e.detail.checked)}
-              />
-              <IonLabel>Unmute temporarily by holding the space bar</IonLabel>
-            </IonItem>
-          </>
-        )}
-      </IonContent>
-    </IonPage>
+      {/* Search and Filter */}
+      <div className="search-filter-container">
+        <div className="search-bar">
+          <IonIcon icon={searchOutline} className="search-icon" />
+          <input type="text" placeholder="China" className="search-input" />
+          <button className="clear-btn">✕</button>
+        </div>
+        <div className="filter-icons">
+          <IonIcon icon={funnelOutline} className="filter-icon" />
+          <IonIcon icon={ellipsisVertical} className="filter-icon" />
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Tabs3;
+export default Tab3;

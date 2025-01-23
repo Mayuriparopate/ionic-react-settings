@@ -11,9 +11,13 @@ const useAudioSettings = () => {
   const [toastMessage, setToastMessage] = useState<string>("");
   const [showToast, setShowToast] = useState<boolean>(false);
   const [outputDevices, setOutputDevices] = useState<MediaDeviceInfo[]>([]);
-  const [selectedOutput, setSelectedOutput] = useState<string | string[] | undefined>("");
+  const [selectedOutput, setSelectedOutput] = useState<
+    string | string[] | undefined
+  >("");
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
+    null
+  );
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -56,10 +60,8 @@ const useAudioSettings = () => {
       } else {
         setInputDevices(inputs);
         setOutputDevices(outputs);
-        setSelectedInput(inputs[0].deviceId);
-        setSelectedOutput(outputs[0].deviceId);
       }
-    } catch (err:any) {
+    } catch (err: any) {
       if (err?.name === "NotAllowedError") {
         alert(
           "Microphone access is denied. Please enable it in your device settings."
@@ -72,13 +74,13 @@ const useAudioSettings = () => {
     }
   };
 
-  const requestMicrophoneAccess = async (deviceId:string) => {
+  const requestMicrophoneAccess = async (deviceId: string) => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: deviceId ? { deviceId } : true,
       });
       return stream;
-    } catch (err:any) {
+    } catch (err: any) {
       if (err.name === "NotAllowedError") {
         alert(
           "Microphone access is denied. Please enable it in your device settings."
@@ -132,7 +134,7 @@ const useAudioSettings = () => {
       };
 
       visualize();
-    } catch (err:any) {
+    } catch (err: any) {
       alert("Error accessing microphone: " + err?.message);
       stopMicTest();
     }
@@ -145,19 +147,19 @@ const useAudioSettings = () => {
       audioContextRef.current = null;
     }
     if (mediaStreamRef.current) {
-      mediaStreamRef.current.getTracks().forEach((track:any) => track.stop());
+      mediaStreamRef.current.getTracks().forEach((track: any) => track.stop());
       mediaStreamRef.current = null;
     }
     setInputLevel(0);
   };
 
-  const handleVolumeChange = (volume:number, type:string) => {
+  const handleVolumeChange = (volume: number, type: string) => {
     if (type === "input" && gainNodeRef.current) {
       gainNodeRef.current.gain.value = volume / 100;
       setInputVolume(volume);
     }
   };
-  const handleDebouncedVolumeChange = (value: number, type:string) => {
+  const handleDebouncedVolumeChange = (value: number, type: string) => {
     if (debouncedVolumeChange.current) {
       clearTimeout(debouncedVolumeChange.current);
     }
@@ -166,7 +168,11 @@ const useAudioSettings = () => {
     }, 100); // Adjust delay as needed
   };
 
-  const handleDeviceSelection = (type:string, deviceId:string, deviceLabel:string) => {
+  const handleDeviceSelection = (
+    type: string,
+    deviceId: string,
+    deviceLabel: string
+  ) => {
     if (type === "input") {
       setSelectedInput(deviceId);
       localStorage.setItem("selectedAudioInput", deviceId);
@@ -178,7 +184,6 @@ const useAudioSettings = () => {
     setShowToast(true);
   };
 
-
   const visualize = (analyser: AnalyserNode, dataArray: Uint8Array) => {
     analyser.getByteFrequencyData(dataArray);
     const average =
@@ -189,7 +194,7 @@ const useAudioSettings = () => {
     );
   };
 
-  const playTestAudio = async () => { 
+  const playTestAudio = async () => {
     try {
       let testAudioElement = audioElement;
 
@@ -325,7 +330,7 @@ const useAudioSettings = () => {
     showToast,
     toastMessage,
     setShowToast,
-    handleDebouncedVolumeChange
+    handleDebouncedVolumeChange,
   };
 };
 
