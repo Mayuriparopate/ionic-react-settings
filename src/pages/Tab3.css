@@ -19,7 +19,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid #0076C0;
-  /* padding: 10px; */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -73,61 +72,7 @@
 .tab-item:hover {
   background-color: #76628f;
 }
-/* 
-.search-filter-container {
-  display: flex;
-  align-items: center;
-  background-color: #76628f;
-  padding: 10px;
-  border-radius: 5px;
-}
 
-.search-bar {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  background-color: #ffffff;
-  padding: 15px 10px;
-  border-radius: 5px;
-}
-
-.search-icon {
-  font-size: 18px;
-  color: #0076c0;
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  color: #000000;
-  margin-left: 8px;
-}
-
-.clear-btn {
-  font-size: 14px;
-  color: #0076c0;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.filter-icons {
-  display: flex;
-  gap: 10px;
-  margin-left: 10px;
-  background-color: white;
-  padding: 11px;
-  border-radius: 6px;
-}
-
-
-.filter-icon {
-  font-size: 22px;
-  color: #0076c0;;
-  cursor: pointer;
-} */
 
 .search-filter-container {
   display: flex;
@@ -142,10 +87,10 @@
   display: flex;
   align-items: center;
   flex: 1;
-  background-color: #ffffff;
-  padding: 10px 10px;
-  border-radius: 5px;
-  min-width: 0; /* Prevents overflow due to fixed widths */
+  /* background-color: #ffffff; */
+  /* padding: 10px 10px; */
+  /* border-radius: 5px; */
+  /* min-width: 0; */
 }
 
 .search-icon {
