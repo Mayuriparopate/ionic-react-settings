@@ -1,0 +1,84 @@
+/* .weekly-Availability {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  overflow-y: scroll;
+} */
+
+.weekly-availability-container {
+    max-height: 80vh;
+    overflow-y: auto; 
+  }
+  
+  .weekly-availability {
+    padding: 0;
+  }
+  
+  .weekly-item {
+    padding: 12px;
+  }
+  
+  .weekly-item.selected {
+    background-color: #9ad9d6;
+  }
+  
+  .day-date-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .day-label {
+    font-size: 25px !important;
+    font-weight: semibold;
+    text-transform: uppercase;
+    height: 70px;
+    padding-right: 5px;
+    border-right: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .date-label {
+    font-size: 14px;
+    color: #666;
+
+  }
+  
+  .availability-container {
+    width: 100%;
+    margin-left: 5px;
+  }
+  
+  .availability-item {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+  }
+  
+  .availability-icon {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  .availability-icon.none {
+    color: #ff3b30;
+  }
+  
+  .availability-icon.video {
+    color: #007bff;
+  }
+  
+  .availability-icon.call {
+    color: #28a745;
+  }
+  
+  .availability-text {
+    font-size: 14px;
+  }
+
+::-webkit-scrollbar {
+    display: none;
+}

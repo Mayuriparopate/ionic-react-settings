@@ -1,0 +1,97 @@
+.mobile-detail-container {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.mobile-detail-card {
+  padding: 20px;
+}
+
+.description {
+  font-size: 14px;
+  color: gray;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.ion-grid {
+  margin-top: 10px;
+}
+
+.ion-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333; /* Updated label color */
+}
+
+.ion-input,
+.ion-select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f9f9f9;
+}
+
+.ion-input::placeholder {
+  color: #aaa;
+}
+
+.radio-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  flex-direction: column;
+}
+
+.ion-radio {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.icon {
+  font-size: 18px;
+  margin-right: 5px;
+  color: #007aff;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+ion-radio-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .ion-row {
+    flex-direction: column;
+  }
+
+  .ion-col {
+    width: 100%;
+  }
+
+  .radio-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .checkbox-container {
+    flex-direction: row;
+    align-items: center;
+  }
+}

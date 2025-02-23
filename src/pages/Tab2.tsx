@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { IonPage, IonContent, IonButton, IonModal } from "@ionic/react";
-import MobileList from "../components/Mobile/MobileList";
-import MobileDetail from "../components/Mobile/MobileDetail";
+import { IonContent, IonPage } from "@ionic/react";
+import { useEffect, useState } from "react";
+import CommonModal from "../components/model/CommonModel";
+import WeeklyAppointmentForm from "../components/Mobile/WeeklyAppointmentForm";
+import WeeklyAvailability from "../components/Mobile/WeeklyAvailability";
 import useMinimumScreenWidth from "../hooks/useMinimumWidth";
 
 const Tab2: React.FC = () => {
-  const [selectedMobile, setSelectedMobile] = useState<number | null>(null);
+  const [selectedWeekDay, setSelectedMobile] = useState<number | null>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
    // Use the custom hook to track screen width and orientation
@@ -28,26 +29,24 @@ const Tab2: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen>
+      <IonContent style={{innerHeight: "100%"}}>
         <div style={{ display: "flex", flexDirection: isMobileView ? "column" : "row" }}>
           {/* List of Mobile Numbers */}
           <div style={{ flex: 1 }}>
-            <MobileList onSelect={handleSelectMobile} selectedId={selectedMobile} />
+            <WeeklyAvailability onSelect={handleSelectMobile} selectedId={selectedWeekDay} />
           </div>
 
-          {/* Detail View (Only for Desktop) */}
-          {!isMobileView && selectedMobile && (
+          {!isMobileView && selectedWeekDay && (
             <div style={{ flex: 2 }}>
-              <MobileDetail mobileId={selectedMobile} />
+              <WeeklyAppointmentForm />
             </div>
           )}
         </div>
 
         {/* Modal for Mobile View */}
-        <IonModal isOpen={isModalOpen} onDidDismiss={() => setIsModalOpen(false)}>
-          <IonButton onClick={() => setIsModalOpen(false)}>Back</IonButton>
-          {selectedMobile && <MobileDetail mobileId={selectedMobile} />}
-        </IonModal>
+        <CommonModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Schedule Request">
+          {selectedWeekDay && <WeeklyAppointmentForm />}
+        </CommonModal>
       </IonContent>
     </IonPage>
   );

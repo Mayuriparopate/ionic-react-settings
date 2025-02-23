@@ -1,0 +1,24 @@
+.heigth-width-100 {
+  --height: 100%;
+  --width: 100%;
+}
+
+.heigth-width-95 {
+  --height: 95%;
+  --width: 95%;
+}
+
+.heigth-width-90 {
+  --height: 90%;
+  --width: 90%;
+}
+
+.heigth-width-85 {
+  --height: 85%;
+  --width: 85%;
+}
+
+.heigth-width-80 {
+  --height: 80%;
+  --width: 80%;
+}
