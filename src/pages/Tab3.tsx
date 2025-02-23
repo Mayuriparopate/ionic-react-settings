@@ -1,190 +1,118 @@
-import React, { useState } from "react";
-import { IonIcon, IonSegment, IonSegmentButton, IonLabel, IonSearchbar } from "@ionic/react";
 import {
-  searchOutline,
-  funnelOutline,
-  ellipsisVertical,
-  starOutline,
-  mapOutline,
-} from "ionicons/icons";
-import "./Tab3.css";
+  IonButton,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonModal,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 
-// Common SearchBox Component
-// const SearchBox: React.FC<{
-//   placeholder: string;
-//   value: string;
-//   onChange: (value: string) => void;
-//   onClear: () => void;
-// }> = ({ placeholder, value, onChange, onClear }) => {
-//   return (
-//     <div className="search-bar">
-//       <IonIcon icon={searchOutline} className="search-icon" />
-//       <input
-//         type="text"
-//         placeholder={placeholder}
-//         value={value}
-//         onChange={(e) => onChange(e.target.value)}
-//         className="search-input"
-//       />
-//       {value && (
-//         <button className="clear-btn" onClick={onClear}>
-//           ✕
-//         </button>
-//       )}
-//     </div>
-//   );
-// };
+import styled from "styled-components";
+import { useState } from "react";
+import Tab2 from "./Tab2";
 
-const SearchBox: React.FC<{
-  placeholder: string;
-  value: string;
-  onChange: (value: string) => void;
-  onClear: () => void;
-}> = ({ placeholder, value, onChange, onClear }) => {
-  return (
-    <div className="search-bar">
-      <IonSearchbar
-        value={value}
-        onIonInput={(e: any) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="ionic-searchbar"
-        showClearButton="always"
-        onIonClear={onClear}
-      />
-    </div>
-  );
+type SessionRequestToolbarProps = {
+  onCloseButtonClicked: () => void;
 };
 
-const Tab3: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("languages");
-  const [searchValue, setSearchValue] = useState("");
+const ToolbarContainer = styled(IonGrid)`
+  padding: 10px 10px 16px 0px;
+  background: transparent;
 
-  const handleSearchChange = (value: string) => {
-    setSearchValue(value);
-    // Implement filtering logic here
-    console.log("Search Value:", value);
-  };
+  .back-button {
+    --padding-start: 0px !important;
+  }
+`;
 
-  const handleClearSearch = () => {
-    setSearchValue("");
-    console.log("Search Cleared");
-  };
+const ActionButtonsCol = styled(IonCol)`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 
+  ion-button {
+    margin: 0;
+  }
+
+  .schedule-btn {
+    --background: white;
+    --color: #0076c0;
+    border: 1px solid #0076c0;
+    border-radius: 4px;
+  }
+
+  .video-btn {
+    --background: #dddcde;
+    --color: #6d6972;
+  }
+
+  .voice-btn {
+    --background: #0076c0;
+    --color: white;
+  }
+
+  .ion-hide-sm-down {
+    display: none;
+  }
+
+  @media (min-width: 576px) {
+    .ion-hide-sm-down {
+      display: inline;
+    }
+
+    ion-button {
+      min-width: 120px;
+    }
+  }
+`;
+const StyledModal = styled(IonModal)`
+  --width: 95%;
+  --height: 95%;
+
+  // @media (min-width: 768px) {
+  //     --height: 90vh;
+  //     --max-width: 600px;
+  //     --border-radius: 12px;
+  // }
+`;
+
+export default function Tab3(
+  props: SessionRequestToolbarProps
+) {
+  const [isOuterModalOpen, setIsOuterModalOpen] = useState(false);
+  const [isInnerModalOpen, setIsInnerModalOpen] = useState(false);
   return (
-    <div className="tab3-container">
-      <IonSegment
-        value={activeTab}
-        className="tabs-header"
-        onIonChange={(e: any) => setActiveTab(e.detail.value!)}
+    <>
+      <IonButton onClick={() => setIsOuterModalOpen(true)}>Click</IonButton>
+
+
+      {/* model */}
+      <StyledModal
+        isOpen={isOuterModalOpen}
+        onDidDismiss={() => setIsOuterModalOpen(false)}
+        backdropDismiss={false}
       >
-        <IonSegmentButton
-          value="languages"
-          className={`tab-item ${activeTab === "languages" ? "active" : ""}`}
-        >
-          <IonLabel>Languages</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton
-          value="favorites"
-          className={`tab-item ${activeTab === "favorites" ? "active" : ""}`}
-        >
-          <IonIcon icon={starOutline} className="tab-icon" />
-          <IonLabel>Favorites</IonLabel>
-        </IonSegmentButton>
-        <IonSegmentButton
-          value="map"
-          className={`tab-item ${activeTab === "map" ? "active" : ""}`}
-        >
-          <IonIcon icon={mapOutline} className="tab-icon" />
-          <IonLabel>Map</IonLabel>
-        </IonSegmentButton>
-      </IonSegment>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Schedule Session</IonTitle>
+            <IonButton
+              slot="end"
+              onClick={() => setIsOuterModalOpen(false)}
+              fill="clear"
+            >
+              Close
+            </IonButton>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-padding">
+          <p>This is where the scheduling form or options will be displayed.</p>
+          <Tab2></Tab2>
+        </IonContent>
+      </StyledModal>
 
-      {/* Search and Filter */}
-      <div className="search-filter-container">
-        <SearchBox
-          placeholder="Search..."
-          value={searchValue}
-          onChange={handleSearchChange}
-          onClear={handleClearSearch}
-        />
-        <div className="filter-icons">
-          <IonIcon icon={funnelOutline} className="filter-icon" />
-        </div>
-        <div className="filter-icons">
-          <IonIcon icon={ellipsisVertical} className="filter-icon" />
-        </div>
-      </div>
-    </div>
+
+    </>
   );
-};
-
-export default Tab3;
-
-
-
-
-
-
-// import React, { useState } from "react";
-// import { IonIcon, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
-// import {
-//   searchOutline,
-//   funnelOutline,
-//   ellipsisVertical,
-//   starOutline,
-//   mapOutline,
-// } from "ionicons/icons";
-// import "./Tab3.css";
-
-// const Tab3: React.FC = () => {
-//   const [activeTab, setActiveTab] = useState("languages");
-
-//   return (
-//     <div className="tab3-container">
-//       {/* Tabs using IonSegment */}
-//       <IonSegment
-//         value={activeTab}
-//         className="tabs-header"
-//         onIonChange={(e: any) => setActiveTab(e.detail.value!)}
-//       >
-//         <IonSegmentButton
-//           value="languages"
-//           className={`tab-item ${activeTab === "languages" ? "active" : ""}`}
-//         >
-//           <IonLabel>Languages</IonLabel>
-//         </IonSegmentButton>
-//         <IonSegmentButton
-//           value="favorites"
-//           className={`tab-item ${activeTab === "favorites" ? "active" : ""}`}
-//         >
-//           <IonIcon icon={starOutline} className="tab-icon" />
-//           <IonLabel>Favorites</IonLabel>
-//         </IonSegmentButton>
-//         <IonSegmentButton
-//           value="map"
-//           className={`tab-item ${activeTab === "map" ? "active" : ""}`}
-//         >
-//           <IonIcon icon={mapOutline} className="tab-icon" />
-//           <IonLabel>Map</IonLabel>
-//         </IonSegmentButton>
-//       </IonSegment>
-
-//       {/* Search and Filter */}
-//       <div className="search-filter-container">
-//         <div className="search-bar">
-//           <IonIcon icon={searchOutline} className="search-icon" />
-//           <input type="text" placeholder="China" className="search-input" />
-//           <button className="clear-btn">✕</button>
-//         </div>
-//         <div className="filter-icons">
-//           <IonIcon icon={funnelOutline} className="filter-icon" />
-//           <IonIcon icon={ellipsisVertical} className="filter-icon" />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Tab3;
-
-
+}

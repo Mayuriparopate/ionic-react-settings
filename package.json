@@ -10,7 +10,7 @@
     "test.e2e": "cypress run",
     "test.unit": "vitest",
     "lint": "eslint",
-     "test": "vitest"
+    "test": "vitest"
   },
   "dependencies": {
     "@capacitor/android": "6.2.0",
@@ -30,7 +30,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^5.3.4",
-    "react-router-dom": "^5.3.4"
+    "react-router-dom": "^5.3.4",
+    "styled-components": "^6.1.15"
   },
   "devDependencies": {
     "@capacitor/cli": "6.2.0",
