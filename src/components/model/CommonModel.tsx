@@ -1,18 +1,31 @@
 import React from 'react';
 import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent } from '@ionic/react';
 import './CommonModel.css';
+import styled from 'styled-components';
+
+
+
+const StyledModal = styled(IonModal)<{ width?: string; height?: string }>`
+  ${({ width, height }) => `
+    --width: ${width || '100%'};
+    --height: ${height || '100%'};
+  `}
+`;
+
+
 
 interface CommonModalProps {
   isOpen: boolean;
   title: string;
-  heightWidth?: string;
+  height?: string;
+  width?: string;
   onClose: () => void;
   children: React.ReactNode;
 }
 
-const CommonModal: React.FC<CommonModalProps> = ({ isOpen, title, heightWidth, onClose, children }) => {
+const CommonModal: React.FC<CommonModalProps> = ({ isOpen, title, width, height, onClose, children }) => {
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={onClose} className={heightWidth} >
+    <StyledModal isOpen={isOpen} onDidDismiss={onClose} width={width} height={height}>
       <IonHeader>
         <IonToolbar>
           <IonTitle>{title}</IonTitle>
@@ -24,7 +37,7 @@ const CommonModal: React.FC<CommonModalProps> = ({ isOpen, title, heightWidth, o
       <IonContent>
         {children}
       </IonContent>
-    </IonModal>
+    </StyledModal>
   );
 };
 

@@ -9,12 +9,11 @@ const Tab2: React.FC = () => {
   const [selectedWeekDay, setSelectedMobile] = useState<number | null>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-   // Use the custom hook to track screen width and orientation
-   const { screenSize, requirementMet } = useMinimumScreenWidth(1024);
-   const isMobileView = !requirementMet();
+  // Use the custom hook to track screen width and orientation
+  const { screenSize, requirementMet } = useMinimumScreenWidth(1024);
+  const isMobileView = !requirementMet();
 
-
-   useEffect(() => {
+  useEffect(() => {
     if (!isMobileView && isModalOpen) {
       setIsModalOpen(false);
     }
@@ -29,11 +28,19 @@ const Tab2: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent style={{innerHeight: "100%"}}>
-        <div style={{ display: "flex", flexDirection: isMobileView ? "column" : "row" }}>
+      <IonContent style={{ innerHeight: "100%" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: isMobileView ? "column" : "row",
+          }}
+        >
           {/* List of Mobile Numbers */}
           <div style={{ flex: 1 }}>
-            <WeeklyAvailability onSelect={handleSelectMobile} selectedId={selectedWeekDay} />
+            <WeeklyAvailability
+              onSelect={handleSelectMobile}
+              selectedId={selectedWeekDay}
+            />
           </div>
 
           {!isMobileView && selectedWeekDay && (
@@ -44,7 +51,13 @@ const Tab2: React.FC = () => {
         </div>
 
         {/* Modal for Mobile View */}
-        <CommonModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Schedule Request">
+        <CommonModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Schedule Request"
+          width={isMobileView ? "100%" : "80%"}
+          height={isMobileView ? "100%" : "80%"}
+        >
           {selectedWeekDay && <WeeklyAppointmentForm />}
         </CommonModal>
       </IonContent>
