@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { useState } from "react";
 import styled from "styled-components";
+import SessionRequestToolbar from "./SessionRequestToolbar";
 
 const StyledNexusSelectWrapper = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
@@ -116,6 +117,8 @@ export function SessionRequestInfoIntake(props: SessionRequestInfoIntakeProps) {
 
   return (
     <>
+      <SessionRequestToolbar />
+
       <Container>
         <SessionHeader>
           <IonLabel>
@@ -164,7 +167,7 @@ export function SessionRequestInfoIntake(props: SessionRequestInfoIntakeProps) {
                 className="custom-ion-select"
                 placeholder="Select Name"
               >
-                  {genderOptions.map((option) => (
+                {genderOptions.map((option) => (
                   <IonSelectOption key={option.value} value={option.value}>
                     {option.label}
                   </IonSelectOption>
@@ -179,11 +182,11 @@ export function SessionRequestInfoIntake(props: SessionRequestInfoIntakeProps) {
                   className="custom-ion-select"
                   placeholder="Select lang"
                 >
-                    {genderOptions.map((option) => (
-                  <IonSelectOption key={option.value} value={option.value}>
-                    {option.label}
-                  </IonSelectOption>
-                ))}
+                  {genderOptions.map((option) => (
+                    <IonSelectOption key={option.value} value={option.value}>
+                      {option.label}
+                    </IonSelectOption>
+                  ))}
                 </IonSelect>
                 <div className="helper-text">
                   Changing this may increase wait time to connect.
@@ -193,38 +196,37 @@ export function SessionRequestInfoIntake(props: SessionRequestInfoIntakeProps) {
           </IonRow>
           <IonCol className="ion-no-padding">
             <IonInput
-                placeholder="Enter Name"
-                className="custom-input"
+              placeholder="Enter Name"
+              className="custom-input"
             ></IonInput>
             <IonInput
-                placeholder="Enter age"
-                className="custom-input"
+              placeholder="Enter age"
+              className="custom-input"
             ></IonInput>
             <IonInput
-                placeholder="Enter dob"
-                className="custom-input"
+              placeholder="Enter dob"
+              className="custom-input"
             ></IonInput>
             <IonInput
-                placeholder="Enter year"
-                className="custom-input"
+              placeholder="Enter year"
+              className="custom-input"
             ></IonInput>
             <IonInput
-                placeholder="Enter doa"
-                className="custom-input"
+              placeholder="Enter doa"
+              className="custom-input"
             ></IonInput>
             <IonInput
-                placeholder="Enter field"
-                className="custom-input"
+              placeholder="Enter field"
+              className="custom-input"
             ></IonInput>
             <IonInput
-                placeholder="Enter first name"
-                className="custom-input"
+              placeholder="Enter first name"
+              className="custom-input"
             ></IonInput>
             <IonInput
-                placeholder="Enter last name"
-                className="custom-input"
+              placeholder="Enter last name"
+              className="custom-input"
             ></IonInput>
-
           </IonCol>
         </IonGrid>
       </Container>
