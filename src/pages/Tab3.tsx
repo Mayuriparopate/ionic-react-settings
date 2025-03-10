@@ -4,6 +4,7 @@ import { useState } from "react";
 import CommonModal from "../components/model/CommonModel";
 import Tab2 from "./Tab2";
 import useMinimumScreenWidth from "../hooks/useMinimumWidth";
+import NexusModal from "../components/NexusModel/NexusModal";
 
 export default function Tab3() {
   const [isOuterModalOpen, setIsOuterModalOpen] = useState(false);
@@ -15,15 +16,18 @@ export default function Tab3() {
     <>
       <IonButton onClick={() => setIsOuterModalOpen(true)}>Click</IonButton>
 
-      <CommonModal
+      <NexusModal
         isOpen={isOuterModalOpen}
-        onClose={() => setIsOuterModalOpen(false)}
+        onDismiss={() => setIsOuterModalOpen(false)}
         title="Schedule Session"
-        width={ "100%"}
-        height={"100%"}
+        showHeader={true}
+        modalName="sessiondetails"
+        showStartBackButton={true}
+        height="100%"
+        width="100%"
       >
         <Tab2></Tab2>
-      </CommonModal>
+      </NexusModal>
     </>
   );
 }

@@ -1,0 +1,98 @@
+/* Base styles for all modals */
+.nexus-modal {
+  --border-radius: 8px;
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Styles for session modal */
+.nexus-modal.sessiondetails {
+  --width: 90%;
+  --height: 90%;
+}
+
+/* Styles for filters modal */
+.nexus-modal.filters {
+  --width: 90%;
+  --height: 63%;
+}
+
+/* Media queries for different screen sizes */
+@media screen and (min-width: 768px) {
+  .nexus-modal.sessiondetails {
+    --width: 80%;
+    --height: 65%;
+  }
+
+  .nexus-modal.filters {
+    --width: 80%;
+    --height: 80%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .nexus-modal.sessiondetails {
+    --width: 70%;
+    --height: 95%;
+  }
+
+  .nexus-modal.filters {
+    --width: 70%;
+    --height: 80%;
+  }
+}
+
+.nexus-modal::part(content) {
+  --background: var(--ion-background-color, #fff);
+}
+
+.nexus-modal ion-header {
+  z-index: auto;
+}
+
+.nexus-modal ion-header::after {
+  display: none;
+}
+
+.nexus-modal ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color);
+}
+
+.nexus-modal ion-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.nexus-modal.sessiondetails .modal-content {
+  padding: 16px;
+}
+
+ion-toolbar ion-title {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+ion-toolbar ion-buttons {
+  z-index: 1;
+}
+
+.ion-padding {
+  --padding-start: var(--ion-padding, 16px);
+  --padding-end: var(--ion-padding, 16px);
+  --padding-top: var(--ion-padding, 16px);
+  --padding-bottom: var(--ion-padding, 16px);
+}
+
+.nexus-modal ion-content::part(scroll) {
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.nexus-modal ion-content::part(scroll)::-webkit-scrollbar {
+  display: none; /* WebKit */
+}
