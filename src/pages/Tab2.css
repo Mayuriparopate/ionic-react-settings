@@ -41,3 +41,10 @@
     align-items: flex-start;
     gap: 8px;
   }
+
+  .line{
+    height: 100%;
+    width: 100px;
+    background-color: #000;
+
+  }

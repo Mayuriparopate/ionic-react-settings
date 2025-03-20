@@ -15,19 +15,32 @@ export default function Tab3() {
   return (
     <>
       <IonButton onClick={() => setIsOuterModalOpen(true)}>Click</IonButton>
+      
+      <CommonModal
+        isOpen={isOuterModalOpen}
+        onClose={() => setIsOuterModalOpen(false)}
+        title="Schedule Session"
+        height="100%"
+        width="100%"
+      >
+        <Tab2></Tab2>
+      </CommonModal>
 
-      <NexusModal
+      {/* <NexusModal
         isOpen={isOuterModalOpen}
         onDismiss={() => setIsOuterModalOpen(false)}
         title="Schedule Session"
         showHeader={true}
         modalName="sessiondetails"
-        showStartBackButton={true}
+        showStartCloseButton={true}
         height="100%"
         width="100%"
+        customButtonText="next"
+        onCustomClick={() => console.log("Next button clicked")}
+        showCustomButton={true}
       >
         <Tab2></Tab2>
-      </NexusModal>
+      </NexusModal> */}
     </>
   );
 }

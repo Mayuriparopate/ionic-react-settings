@@ -45,11 +45,11 @@ const CommonModal: React.FC<CommonModalProps> = ({
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton color="primary">cancel</IonButton>
+            <IonButton onClick={onClose} color="primary">cancel</IonButton>
           </IonButtons>
           <IonTitle>Schedule Request</IonTitle>
           <IonButtons slot="end">
-            <IonButton color="primary">continue</IonButton>
+            <IonButton onClick={onClose} color="primary">continue</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
